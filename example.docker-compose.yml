@@ -1,0 +1,11 @@
+version: '3'
+services:
+  main:
+    tty: true
+    volumes:
+      - ./OpenUpgrade:/openupgrade
+      - ./in:/in
+      - ./out:/out
+    build:
+      context: .
+    image: openupgrade-env:v1.0
