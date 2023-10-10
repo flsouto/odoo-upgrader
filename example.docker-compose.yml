@@ -6,6 +6,7 @@ services:
       - ./OpenUpgrade:/OpenUpgrade
       - ./in:/in
       - ./out:/out
+      - ./inner-scripts:/scripts
     build:
       context: .
-    image: openupgrade-env
+    image: odoo-upgrader
