@@ -1,5 +1,5 @@
 OpenUpgrade
 *.swp
-docker-compose.yml
+/docker-compose.yml
 in
 out

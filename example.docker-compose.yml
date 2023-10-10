@@ -3,9 +3,9 @@ services:
   main:
     tty: true
     volumes:
-      - ./OpenUpgrade:/openupgrade
+      - ./OpenUpgrade:/OpenUpgrade
       - ./in:/in
       - ./out:/out
     build:
       context: .
-    image: openupgrade-env:v1.0
+    image: openupgrade-env
