@@ -1,4 +1,4 @@
 alias enter="docker-compose exec main /bin/bash"
 alias dc="docker-compose"
-alias dce="docker-compose exec"
+alias dce="docker-compose exec main"
 alias push="./push.sh"

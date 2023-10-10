@@ -4,6 +4,8 @@ services:
     extends:
       file: ../docker-compose.yml
       service: main
+    volumes:
+      - ./inner-scripts:/upgrader
     build:
       context: .
     image: odoo-upgrader12
