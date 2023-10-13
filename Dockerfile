@@ -20,6 +20,12 @@ RUN sudo apt-get install build-essential -y
 RUN apt-get install python3.7-dev -y
 RUN sudo apt-get install libsasl2-dev libldap2-dev libssl-dev -y
 RUN sudo apt-get install libpq-dev -y
+
+RUN sudo apt install python2.7 -y
+RUN sudo apt install libeccodes-dev -y
+RUN apt-get install libxml2-dev libxslt-dev python2.7-dev -y
+RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2.7
+
 COPY ./entrypoint.sh /
 RUN chmod 777 ./entrypoint.sh
 
