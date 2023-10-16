@@ -26,6 +26,9 @@ RUN sudo apt install libeccodes-dev -y
 RUN apt-get install libxml2-dev libxslt-dev python2.7-dev -y
 RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2.7
 
+RUN apt-get install nodejs npm -y
+RUN npm install -g sass -y
+
 COPY ./entrypoint.sh /
 RUN chmod 777 ./entrypoint.sh
 
