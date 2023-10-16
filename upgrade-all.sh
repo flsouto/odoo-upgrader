@@ -10,6 +10,7 @@ do
     docker-compose exec main bash "/scripts/import-db.sh"
     docker-compose exec main bash "/scripts/upgrade.sh"
     docker-compose exec main bash "/scripts/export.sh"
+    docker-compose down
     cd ..
     cp out/dump.sql in/dump.sql
 done
