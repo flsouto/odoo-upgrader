@@ -21,8 +21,15 @@ else
     PYTHON_VERSION="2.7"
 fi
 
-cat <<YML > upgrader$VERSION/Dockerfile
+cat <<DOC > upgrader$VERSION/Dockerfile
 FROM odoo-upgrader
 RUN curl https://raw.githubusercontent.com/OCA/OpenUpgrade/$VERSION.0/requirements.txt > /tmp/requirements.txt
 RUN python$PYTHON_VERSION -m pip install -r /tmp/requirements.txt
-YML
+DOC
+
+if [[ $VERSION == 14 ]]; then
+cat <<DOC >> upgrader14/Dockerfile
+RUN cd / && git clone https://github.com/odoo/odoo.git --depth=1 --branch=14.0
+RUN python3.7 -m pip install -r /odoo/requirements.txt
+DOC
+fi

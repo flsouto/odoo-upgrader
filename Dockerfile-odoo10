@@ -1,8 +1,0 @@
-sudo apt install python2.7 -y
-sudo apt-get install libsasl2-dev libldap2-dev libssl-dev -y
-sudo apt install libeccodes-dev
-apt-get install libxml2-dev libxslt-dev python-dev2.7
-sudo apt install libeccodes-dev
-curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2.7
-apt-get install libxml2-dev libxslt-dev python2.7-dev
-sudo apt install python2.7-distutils -y
