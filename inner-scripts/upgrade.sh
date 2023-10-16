@@ -1,4 +1,5 @@
 cd /OpenUpgrade
+git checkout --
 git checkout $UPGRADER_VERSION.0
 
 if [[ $UPGRADER_VERSION -gt 10 ]]; then
