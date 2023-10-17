@@ -13,4 +13,7 @@ do
     docker-compose down
     cd ..
     cp out/dump.sql in/dump.sql
+    rm in/data -Rf
+    cp out/data in/data -R
+    rm in/data/filestore/odoo/checklist -Rf
 done

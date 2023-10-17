@@ -16,13 +16,14 @@ if [[ $UPGRADER_VERSION == 14 ]]; then
     awk 'NR > 1' odoo-bin >> odoo-bin-tmp
     chmod 777 odoo-bin-tmp
 
-    ./odoo-bin-tmp -d odoo --upgrade-path=/OpenUpgrade/openupgrade_scripts/scripts --update all --stop-after-init --load=base,web,openupgrade_framework
+    ./odoo-bin-tmp -d odoo --upgrade-path=/OpenUpgrade/openupgrade_scripts/scripts --update all --stop-after-init --load=base,web,openupgrade_framework --data-dir=/in/data
 
 else
 
+    cp /in/data /tmp/upgraded-data -R
     echo "#!/usr/bin/env python$PYTHON_VERSION" > odoo-bin-tmp
     awk 'NR > 1' odoo-bin >> odoo-bin-tmp
     chmod 777 odoo-bin-tmp
-    ./odoo-bin-tmp -d odoo --stop-after-init -u all
+    ./odoo-bin-tmp -d odoo --stop-after-init -u all --data-dir=/tmp/upgraded-data
 
 fi
