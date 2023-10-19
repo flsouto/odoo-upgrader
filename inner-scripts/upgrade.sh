@@ -8,6 +8,8 @@ else
     PYTHON_VERSION="2.7"
 fi
 
+cp /in/data /tmp/upgraded-data -R
+
 if [[ $UPGRADER_VERSION == 14 ]]; then
 
     cd /odoo
@@ -20,11 +22,10 @@ if [[ $UPGRADER_VERSION == 14 ]]; then
 	--addons-path=/odoo/addons,/OpenUpgrade \
 	--upgrade-path=/OpenUpgrade/openupgrade_scripts/scripts \
 	--update all --stop-after-init \
-	--load=base,web,openupgrade_framework --data-dir=/in/data
+	--load=base,web,openupgrade_framework --data-dir=/tmp/upgraded-data
 
 else
 
-    cp /in/data /tmp/upgraded-data -R
     echo "#!/usr/bin/env python$PYTHON_VERSION" > odoo-bin-tmp
     awk 'NR > 1' odoo-bin >> odoo-bin-tmp
     chmod 777 odoo-bin-tmp
