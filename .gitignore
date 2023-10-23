@@ -3,3 +3,4 @@ OpenUpgrade
 /docker-compose.yml
 in
 out
+upgrader1{0..6}/

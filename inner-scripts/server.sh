@@ -1,5 +1,5 @@
 cd /OpenUpgrade
-git checkout --
+git restore .
 git checkout $UPGRADER_VERSION.0
 
 if [[ $UPGRADER_VERSION -gt 10 ]]; then
@@ -8,6 +8,9 @@ else
     PYTHON_VERSION="2.7"
 fi
 
+if [[ -z "$SKIP_FILESTORE" ]]; then
+    data_dir_param="--data-dir=/in/data"
+fi
 
 if [[ $UPGRADER_VERSION == 14 ]]; then
 

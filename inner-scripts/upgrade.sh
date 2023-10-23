@@ -1,5 +1,5 @@
 cd /OpenUpgrade
-git checkout --
+git restore .
 git checkout $UPGRADER_VERSION.0
 
 if [[ $UPGRADER_VERSION -gt 10 ]]; then
@@ -8,7 +8,10 @@ else
     PYTHON_VERSION="2.7"
 fi
 
-cp /in/data /tmp/upgraded-data -R
+data_dir_params=""
+if [[ -z "$SKIP_FILESTORE" ]]; then
+    data_dir_param="--data-dir=/in/data"
+fi
 
 if [[ $UPGRADER_VERSION == 14 ]]; then
 
@@ -22,13 +25,15 @@ if [[ $UPGRADER_VERSION == 14 ]]; then
 	--addons-path=/odoo/addons,/OpenUpgrade \
 	--upgrade-path=/OpenUpgrade/openupgrade_scripts/scripts \
 	--update all --stop-after-init \
-	--load=base,web,openupgrade_framework --data-dir=/tmp/upgraded-data
+	--load=base,web,openupgrade_framework \
+	$data_dir_param
 
 else
 
     echo "#!/usr/bin/env python$PYTHON_VERSION" > odoo-bin-tmp
     awk 'NR > 1' odoo-bin >> odoo-bin-tmp
     chmod 777 odoo-bin-tmp
-    ./odoo-bin-tmp -d odoo --stop-after-init -u all --data-dir=/tmp/upgraded-data
+    ./odoo-bin-tmp -d odoo --stop-after-init -u all \
+    $data_dir_param
 
 fi
