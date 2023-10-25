@@ -28,6 +28,10 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2.7
 
 RUN apt-get install nodejs npm -y
 RUN npm install -g sass -y
+RUN apt-get install node-less -y
+RUN python3.7 -m pip install phonenumbers
+RUN python2.7 -m pip install phonenumbers
+
 
 COPY ./entrypoint.sh /
 RUN chmod 777 ./entrypoint.sh

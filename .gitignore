@@ -4,3 +4,4 @@ OpenUpgrade
 in
 out
 upgrader1{0..6}/
+dump*.sql
