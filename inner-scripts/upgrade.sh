@@ -47,11 +47,21 @@ else
             -c "UPDATE res_country SET address_format = E'$address_format' WHERE name LIKE 'Brazil';"
     fi
 
+    if [[ $UPGRADER_VERSION == 12 ]]; then
+        # desativa views problemáticas
+        sudo -u postgres psql -d odoo \
+            -c "UPDATE ir_ui_view SET active = false WHERE name='account assets';"
+    fi
+
     ./odoo-bin-tmp -d odoo --stop-after-init -u all $data_dir_param
 
     # remove demais módulos problemáticos via script
     if [[ $UPGRADER_VERSION == 11 ]]; then
-        cat /scripts/uninstall_modules.py | ./odoo-bin-tmp shell -d odoo
+        cat /scripts/uninstall_modules11.py | ./odoo-bin-tmp shell -d odoo
+    fi
+
+    if [[ $UPGRADER_VERSION == 12 ]]; then
+        cat /scripts/uninstall_modules12.py | ./odoo-bin-tmp shell -d odoo
     fi
 
 
