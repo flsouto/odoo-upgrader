@@ -64,5 +64,20 @@ else
         cat /scripts/uninstall_modules12.py | ./odoo-bin-tmp shell -d odoo
     fi
 
+    if [[ $UPGRADER_VERSION == 13 ]]; then
+
+
+        run_query="sudo -u postgres psql -d odoo -c"
+
+        $run_query "UPDATE res_partner SET lang='pt_BR' WHERE id IN(SELECT partner_id FROM res_users)"
+        $run_query "UPDATE website SET default_lang_code = 'pt_BR', default_lang_id = 1"
+        $run_query "UPDATE website_lang_rel SET lang_id = 1 WHERE website_id = 1"
+        $run_query "UPDATE res_lang SET active = false WHERE id = 2"
+        $run_query "SELECT imm.name FROM ir_model_constraint imc\
+            LEFT JOIN ir_module_module imm ON imm.id = imc.module\
+            WHERE imm.id IS NULL OR imm.state <> 'installed'"
+
+    fi
+
 
 fi
