@@ -13,6 +13,8 @@ if [[ -z "$SKIP_FILESTORE" ]]; then
     data_dir_param="--data-dir=/in/data"
 fi
 
+run_query="sudo -u postgres psql -d odoo -c"
+
 if [[ $UPGRADER_VERSION == 14 ]]; then
 
     cd /odoo
@@ -20,6 +22,8 @@ if [[ $UPGRADER_VERSION == 14 ]]; then
     echo "#!/usr/bin/env python3.7" > odoo-bin-tmp
     awk 'NR > 1' odoo-bin >> odoo-bin-tmp
     chmod 777 odoo-bin-tmp
+
+    $run_query "UPDATE res_partner SET lang='en_US'"
 
     ./odoo-bin-tmp -d odoo \
 	--addons-path=/odoo/addons,/OpenUpgrade \
@@ -37,21 +41,33 @@ else
     if [[ $UPGRADER_VERSION == 11 ]]; then
 
         # remove o tema do bootswatch para permitir que a migração do 10 para o 11 seja concluída
-        sudo -u postgres psql -d odoo -c "DELETE FROM ir_module_module WHERE name = 'theme_bootswatch';"
-        sudo -u postgres psql -d odoo -c "DELETE FROM ir_model_data WHERE module = 'theme_bootswatch';"
-        sudo -u postgres psql -d odoo -c "DELETE FROM ir_model_data WHERE name = 'module_theme_bootswatch';"
+        $run_query "DELETE FROM ir_module_module WHERE name = 'theme_bootswatch';"
+        $run_query "DELETE FROM ir_model_data WHERE module = 'theme_bootswatch';"
+        $run_query "DELETE FROM ir_model_data WHERE name = 'module_theme_bootswatch';"
 
         # altera o formato de endereço
         address_format=' %(street)s, %(street2)s\n%(zip)s - %(city)s - %(state_code)s\n%(country_name)s'
-        sudo -u postgres psql -d odoo \
-            -c "UPDATE res_country SET address_format = E'$address_format' WHERE name LIKE 'Brazil';"
+        $run_query "UPDATE res_country SET address_format = E'$address_format' WHERE name LIKE 'Brazil';"
     fi
 
     if [[ $UPGRADER_VERSION == 12 ]]; then
         # desativa views problemáticas
-        sudo -u postgres psql -d odoo \
-            -c "UPDATE ir_ui_view SET active = false WHERE name='account assets';"
+        $run_query "UPDATE ir_ui_view SET active = false WHERE name='account assets';"
     fi
+
+    if [[ $UPGRADER_VERSION == 13 ]]; then
+        # altera language
+        $run_query "UPDATE res_partner SET lang='en_US' WHERE id IN(SELECT partner_id FROM res_users)"
+        $run_query "UPDATE website SET default_lang_code = 'pt_BR', default_lang_id = 1"
+        $run_query "UPDATE website_lang_rel SET lang_id = 1 WHERE website_id = 1"
+        $run_query "UPDATE res_lang SET active = false WHERE id = 2"
+
+        # deleta constraint
+        $run_query "DELETE FROM ir_model_constraint WHERE module IN(\
+            SELECT id FROM ir_module_module WHERE state <> 'installed'\
+        )"
+    fi
+
 
     ./odoo-bin-tmp -d odoo --stop-after-init -u all $data_dir_param
 
@@ -65,19 +81,7 @@ else
     fi
 
     if [[ $UPGRADER_VERSION == 13 ]]; then
-
-
-        run_query="sudo -u postgres psql -d odoo -c"
-
-        $run_query "UPDATE res_partner SET lang='pt_BR' WHERE id IN(SELECT partner_id FROM res_users)"
-        $run_query "UPDATE website SET default_lang_code = 'pt_BR', default_lang_id = 1"
-        $run_query "UPDATE website_lang_rel SET lang_id = 1 WHERE website_id = 1"
-        $run_query "UPDATE res_lang SET active = false WHERE id = 2"
-        $run_query "SELECT imm.name FROM ir_model_constraint imc\
-            LEFT JOIN ir_module_module imm ON imm.id = imc.module\
-            WHERE imm.id IS NULL OR imm.state <> 'installed'"
-
+        cat /scripts/uninstall_modules13.py | ./odoo-bin-tmp shell -d odoo
     fi
-
 
 fi

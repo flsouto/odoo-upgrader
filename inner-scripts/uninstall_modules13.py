@@ -1,10 +1,5 @@
 items = [
-    'web_diagram','website_forum_doc','account_asset_management',
-    'stock',
-    'stock_account',
-    'purchase_stock',
-    'sale_stock',
-    'website_sale_stock'
+    'hr'
 ]
 
 for item in items:
