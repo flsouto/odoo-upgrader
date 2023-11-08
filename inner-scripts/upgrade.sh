@@ -82,6 +82,8 @@ else
 
     if [[ $UPGRADER_VERSION == 13 ]]; then
         cat /scripts/uninstall_modules13.py | ./odoo-bin-tmp shell -d odoo
+        $run_query "UPDATE ir_ui_view SET active = false WHERE arch_db LIKE '%group_mass_mailing_campaign%' AND arch_fs LIKE '%config%'"
+        $run_query "UPDATE ir_ui_view SET active = false WHERE arch_db LIKE '%hr_%' AND arch_fs LIKE '%config%' AND arch_fs LIKE '%hr_%'"
     fi
 
 fi

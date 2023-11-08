@@ -7,7 +7,7 @@ items = [
     'openeducat_transportation', 'association', 'base_kanban_stage', 'base_name_search_improved',
     'base_report_auto_create_qweb', 'datetime_formatter', 'l10n_br', 'l10n_br_base', 'l10n_br_crm',
     'l10n_br_zip', 'l10n_br_zip_correios', 'membership', 'project_timesheet', 'sale_service',
-    'website_membership', 'mrp_repair', 'theme_bootswatch','crm_claim','hr_timesheet'
+    'website_membership', 'mrp_repair', 'theme_bootswatch','crm_claim','hr_timesheet','mass_mailing'
 ]
 
 for item in items:
