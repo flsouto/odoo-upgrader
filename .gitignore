@@ -3,5 +3,7 @@ OpenUpgrade
 /docker-compose.yml
 in
 out
-upgrader1{0..6}/
+upgrader1[0-6]/
 dump*.sql
+post-upgrade/config.py
+__pycache__
