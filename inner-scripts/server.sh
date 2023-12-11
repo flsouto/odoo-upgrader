@@ -20,7 +20,9 @@ if [[ $UPGRADER_VERSION == 14 ]]; then
     awk 'NR > 1' odoo-bin >> odoo-bin-tmp
     chmod 777 odoo-bin-tmp
 
-    ./odoo-bin-tmp -d odoo --data-dir=/in/data --logfile /in/odoo-14.log
+    ./odoo-bin-tmp -d odoo --data-dir=/in/data \
+    --addons-path=/odoo/addons,/OpenUpgrade,/in/addons/l10n-brazil/\
+    --logfile /in/odoo-14.log
 
 else
 

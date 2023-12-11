@@ -15,19 +15,25 @@ odoo14 = OdooService(
     target_password
 )
 
-odoo14.write('res.partner',101362,name='José Lindomar Costa e Silva')
-result = odoo14.search_read('res.partner',['id','=',101362],limit=1)
-print(result)
-exit()
-
 
 partners = odoo9.search_read('res.partner',
     ['cnpj_cpf','<>','False'],
     fields = ['cnpj_cpf'],
-    limit = 10
+    limit = 999999
 )
+print("%d" % len(partners))
+exit()
+fails=[]
 
 for p in partners:
-    print('{} - {}'.format(p['id'], p['cnpj_cpf']))
+    print("Updating %d with %s" % (p['id'], p['cnpj_cpf']))
+    try:
+        result = odoo14.write('res.partner', p['id'], l10n_br_cnpj_cpf = p['cnpj_cpf'])
+        print(result)
+    except:
+        fails.append(p['id'])
+        print("Fails: %d" % len(fails))
 
+print(fails)
+print("Total fails: %d" % len(fails))
 
