@@ -1,5 +1,5 @@
-
 import xmlrpc.client
+from config import *
 
 class OdooService:
 
@@ -27,3 +27,18 @@ class OdooService:
 
     def write(self, model, id, **data):
         return self(model, 'write', [[id], data])
+
+
+odoo9 = OdooService(
+    source_url,
+    source_db,
+    source_username,
+    source_password
+)
+
+odoo14 = OdooService(
+    target_url,
+    target_db,
+    target_username,
+    target_password
+)
