@@ -29,16 +29,23 @@ class OdooService:
         return self(model, 'write', [[id], data])
 
 
-odoo9 = OdooService(
+source = OdooService(
     source_url,
     source_db,
     source_username,
     source_password
 )
 
-odoo14 = OdooService(
+target = OdooService(
     target_url,
     target_db,
     target_username,
     target_password
+)
+
+seeder = OdooService(
+    seeder_url,
+    seeder_db,
+    seeder_username,
+    seeder_password
 )

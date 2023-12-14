@@ -2,7 +2,7 @@ from odoo_service import *
 
 def migrate_field(model, field_from, field_to):
 
-    rows = odoo9.search_read(model,
+    rows = source.search_read(model,
         [field_from,'<>','False'],
         fields = [field_from],
         limit = 999999
@@ -13,10 +13,10 @@ def migrate_field(model, field_from, field_to):
     for row in rows:
         print("Updating %d with %s" % (row['id'], row[field_from]))
         try:
-            result = odoo14.write(model, p['id'], **{field_to: p[field_from]})
+            result = target.write(model, row['id'], **{field_to: row[field_from]})
             print(result)
         except:
-            fails.append(p['id'])
+            fails.append(row['id'])
             print("Fails: %d" % len(fails))
 
     print(fails)
