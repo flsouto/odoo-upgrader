@@ -13,6 +13,7 @@ def migrate_field(model, field_from, field_to, *, formatter=None):
     for row in rows:
         value = row[field_from]
         if formatter: value = formatter(value)
+        if value is False: continue
         print("Updating %d with %s" % (row['id'], value))
         try:
             result = target.write(model, row['id'], **{field_to: value})
@@ -42,16 +43,9 @@ def migrate_many2one(model, field_from, field_to, source_table):
 #migrate_many2one('res.partner','x_consclass', 'professional_regulator', 'fgmed.professional.regulators')
 
 import re
-def format_mobile(number):
-    number = number.strip()
-    if re.compile(r'^\(\d\d\)\s*\d{8}$').match(number):
-        return re.sub("\d{8}", lambda m: '9' + m.group(0), number)
-    number
+from phone import validate_and_sanitize
 
-print(format_mobile("(51) 96879088"))
-exit()
-
-migrate_field('res.partner','x_whatsapp','mobile', formatter= lambda v: v.strip())
+migrate_field('res.partner','x_whatsapp','mobile', formatter = validate_and_sanitize)
 
 #migrate_field('res.partner','cnpj_cpf','l10n_br_cnpj_cpf')
 #migrate_field('res.partner','x_regprof','professional_id')
