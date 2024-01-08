@@ -16,3 +16,5 @@ seeder_url="http://127.0.0.1:8069"
 seeder_db="odoo"
 seeder_username="admin"
 seeder_password='6666666666'
+
+fgmed_addons_path = "/path/to/addons/"

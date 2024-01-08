@@ -28,6 +28,9 @@ class OdooService:
     def write(self, model, id, **data):
         return self(model, 'write', [[id], data])
 
+    def create(self, model, **data):
+        return self(model, 'create', [data])
+
 
 source = OdooService(
     source_url,
