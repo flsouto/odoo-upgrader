@@ -25,9 +25,10 @@ def migrate_field(model, field_from, field_to, *, formatter=None):
     print("Total fails: %d" % len(fails))
 
 
-def migrate_many2one(model, field_from, field_to, source_table):
+def migrate_many2one(model, field_from, field_to, source_table, *, formatter=None):
     rows = target.search_read(source_table,fields=['id','name'])
     name2id = {r['name']:r['id'] for r in rows}
+    if formatter: formatter(name2id)
     errors = []
     for row in source.search_read(model, fields=['id',field_from]):
         if row[field_from]:
@@ -40,14 +41,21 @@ def migrate_many2one(model, field_from, field_to, source_table):
 
     if errors: print("Errors (%d): " % len(errors), errors)
 
-#migrate_many2one('res.partner','x_consclass', 'professional_regulator', 'fgmed.professional.regulators')
 
 import re
 from phone import validate_and_sanitize
 
+migrate_many2one('res.partner', 'x_orgexp', 'id_regulator', 'fgmed.id.regulators')
+
+migrate_many2one('res.partner','x_nacionalidade', 'country_origin_id', 'res.country',
+    formatter=lambda d: d.update({'Brazil':d['Brasil']})
+)
+migrate_many2one('res.partner','x_consclass', 'professional_regulator', 'fgmed.professional.regulators')
 migrate_field('res.partner','x_whatsapp','mobile', formatter = validate_and_sanitize)
+migrate_field('res.partner','cnpj_cpf','l10n_br_cnpj_cpf')
+migrate_field('res.partner','x_regprof','professional_id')
 
-#migrate_field('res.partner','cnpj_cpf','l10n_br_cnpj_cpf')
-#migrate_field('res.partner','x_regprof','professional_id')
-
-#todo add more migrations here....
+#missing: genero
+#missing: estado_civil
+#missing: x_especializacoes
+#missing: x_graduacoes
